@@ -1,26 +1,28 @@
 pipeline {
     agent any
     stages {
-        stage("Build and Test Application") {
+        stage("Dotnet restore dependency") {
             when {
                 branch 'main'
             }
-            stages {
-                stage("Dotnet restore") {
-                    steps {
-                        sh "dotnet restore"
-                    }
-                }
-                stage("Dotnet build") {
-                    steps {
-                        sh "dotnet build --no-restore"
-                    }
-                }
-                stage("Dotnet test") {
-                    steps {
-                        sh "dotnet test --no-build --verbosity normal"
-                    }
-                }
+            steps {
+                sh "dotnet restore"
+            }
+        }
+        stage("Dotnet build") {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh "dotnet build --no-restore"
+            }
+        }
+        stage("Dotnet test") {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh "dotnet test --no-build --verbosity normal"
             }
         }
     }
